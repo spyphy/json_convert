@@ -18,7 +18,8 @@ INPUT FORMAT:
 class = data['samples'][i]['class']
 rect = data['samples'][i]['rect']
 
-OUTPUT FORMAT: class x y w h
+OUTPUT FORMAT: 
+<object-class> <x> <y> <width> <height>
 0 0.2123 0.2371 0.7735 0.9142
 0 0.2638 0.3006 0.8056 0.9155
 
@@ -59,7 +60,7 @@ def convert_file(json_file, txt_file):
 
 		out_string = '{0} {1:.5f} {2:.5f} {3:.5f} {4:.5f}'.\
 			format(cl, x, y, w, h)
-		print(out_string)
+		#print(out_string)
 		f_out.write(out_string + '\n')
 
 	f_in.close()
@@ -70,7 +71,9 @@ def convert_dir(in_dir, out_dir):
 	files = os.listdir(in_dir)
 	
 	for in_file_name in files:
-		base = os.path.splitext(in_file_name)[0]
+		#base = os.path.splitext(in_file_name)[0]
+		jpg_file = os.path.splitext(in_file_name)[0]
+		base = in_file_name.split('.')[0]
 		ext = os.path.splitext(in_file_name)[1]
 		if not ext == '.json': 
 			continue
@@ -84,7 +87,9 @@ def convert_dir(in_dir, out_dir):
 		print(out_file_path)
 		convert_file(in_file_path, out_file_path)
 		
-
+		jpg_file_old_path = in_dir + '/' + jpg_file
+		jpg_file_new_path = out_dir + '/' + jpg_file
+		os.system('cp {0} {1}'.format(jpg_file_old_path, jpg_file_new_path))
 
 #---------------
 
@@ -109,5 +114,5 @@ if __name__ == '__main__':
 	#convert_file(json_file, txt_file)
 
 	in_dir = 'in'
-	out_dir = 'out'
+	out_dir = 'obj'
 	convert_dir(in_dir, out_dir)
